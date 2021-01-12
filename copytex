@@ -1,0 +1,20 @@
+ - name: backup file  if content changed
+      find:
+         recurse: no
+         paths: /filespoo/
+         pattrens:
+          - '{{file}}\..*-'
+         use regex: true
+      register: find backup
+      when: content changed.changed
+
+    - name: select the latest backup file found on disk
+      setfact:
+        latest backup: "{{ (find backup.files | sort(attribute='mtime') | last).path }}"
+      when: content changed.changed
+
+    - name: show the latest selected backup
+      debug:
+        var: latest backup
+      when: content changed.changed
+

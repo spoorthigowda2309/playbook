@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  tasks: 
+    - name: system reboot
+      shell: "reboot now"
+      async: 1
+      poll: 0
+
+    - name: wait for 10 min
+      pause:
+        seconds: 100
+
